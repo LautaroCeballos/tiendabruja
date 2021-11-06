@@ -1,19 +1,28 @@
-import { Flex } from '@chakra-ui/layout';
-import { Image } from '@chakra-ui/react'
-import './App.css';
-import logoTiendaBruja from './images/tbruja.svg'
+
+import AppLayout from 'componentes/AppLayout'
+import Header from 'componentes/Header'
+import Home from 'pages/home'
+import AddEditForm from 'componentes/AddEditForm'
+import {
+  BrowserRouter as Router,
+  Route,
+  Switch
+} from 'react-router-dom'
 
 
-function App() {
-  return (
-    <div className="App">
-        <header>
-          <Flex bg="brand.accent" h="6rem" justify="center" fill="white">
-            <Image width="250px" src={logoTiendaBruja} alt="Logo TiendaBruja"/>
-          </Flex>
-        </header>
-    </div>
-  );
+export default function App() {
+  return <>
+    <Router>
+      <Header />
+      <AppLayout>
+        <Switch>
+          <Route exact path="/" component={Home}/>
+          <Route exact path="/home" component={Home}/>
+          <Route path="/agregar" component={AddEditForm}/>
+          <Route path="/editar/:id" component={AddEditForm}/>
+        </Switch>
+      </AppLayout>
+    </Router>
+  </>
 }
 
-export default App;
