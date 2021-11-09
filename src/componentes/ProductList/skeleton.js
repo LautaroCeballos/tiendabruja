@@ -10,7 +10,7 @@ export default function SkeletonProductList() {
             {   
                 cantSkeletons.map(cont => {
                     return <>
-                        <chakra.article display="flex" flexWrap="wrap" key={cont}>
+                        <chakra.article display="flex" flexWrap="wrap" key={cont+1}>
                             <Flex width="100%">
                                 <Box minWidth="5em" marginRight="1em" textAlign="center">
                                     <Skeleton boxSize="5em" margin="auto" borderRadius="md" />
