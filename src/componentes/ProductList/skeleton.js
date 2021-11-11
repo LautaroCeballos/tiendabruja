@@ -8,9 +8,9 @@ export default function SkeletonProductList() {
         <Stack direction="column" paddingTop="1.5em">
             
             {   
-                cantSkeletons.map(cont => {
-                    return <>
-                        <chakra.article display="flex" flexWrap="wrap" key={cont+1}>
+                cantSkeletons.map((index) => {
+                    return (
+                        <chakra.article display="flex" flexWrap="wrap" key={index}>
                             <Flex width="100%">
                                 <Box minWidth="5em" marginRight="1em" textAlign="center">
                                     <Skeleton boxSize="5em" margin="auto" borderRadius="md" />
@@ -25,8 +25,7 @@ export default function SkeletonProductList() {
                             </Flex>
                             <Divider margin=".5em 0 1em"/>
                         </chakra.article>
-                    </>
-                })
+                    )})
             }
         </Stack>
     </>

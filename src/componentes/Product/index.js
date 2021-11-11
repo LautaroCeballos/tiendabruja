@@ -1,10 +1,7 @@
 import { Flex, Text, Box } from "@chakra-ui/layout"
 import { Image } from "@chakra-ui/image"
 import { chakra } from "@chakra-ui/system"
-import { 
-    // Tag, 
-    Divider 
-} from "@chakra-ui/react"
+import { Tag, Divider } from "@chakra-ui/react"
 import { useState } from "react"
 import { useEffect } from "react/cjs/react.development"
 
@@ -43,11 +40,15 @@ export default function Product({ item }) {
                         <Text color="green.700">Costo Pack: ${product.costoMayorista}</Text> 
                         <Text color="green.700">Costo Unitario: ${product.costoUnitario}</Text> 
                         <Text>Proveedor: {product.proveedor}</Text>
-                        {/* <Box width="100%" marginTop=".5em">
-                            {product.tags.map(tag => {
-                                return <Tag key={tag} variant="outline" colorScheme="purple" margin="0 .5em .5em 0">{tag}</Tag>
-                            })}
-                        </Box> */}
+                        <Box width="100%" marginTop=".5em">
+                            {   
+                                product.tags && Array.isArray(product.tags) && product.tags.length > 0 &&
+                                    product.tags.map((tag, index) => {
+                                        return <Tag key={index} variant="outline" colorScheme="purple" margin="0 .5em .5em 0">{tag}</Tag>
+                                    })
+                            }
+                        </Box>
+
                     </Flex>
                 }
                 <Divider marginBottom="1em"/>
