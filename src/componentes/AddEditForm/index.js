@@ -1,19 +1,18 @@
-// import { useState } from "react/cjs/react.development"
-import { Formik, Form, Field } from "formik"
+import { Formik, Form} from "formik"
 import { addProduct } from "services/products.js"
 import imgDefault from "images/default.jpg"
 import InputField from "./InputField"
 import validations from "./validations"
+import InputTagField from "./InputTagField"
 import {
     Button,
     Flex,
     Grid,
     GridItem,
-    Image,
-    FormControl,
-    FormLabel,
-    Input
+    Image
 } from "@chakra-ui/react"
+
+
 
 export default function AddEditForm() {
     return <>
@@ -29,12 +28,13 @@ export default function AddEditForm() {
                 promo: '',
                 proveedor: '',
                 ganancia: '',
-                tags: ''
+                tags: []
             }}
 
             validate={validations}
 
             onSubmit={(dataForm, { resetForm }) => {
+                console.log(dataForm)
                 addProduct(dataForm)
                     .then(() => {
                         resetForm();
@@ -71,21 +71,7 @@ export default function AddEditForm() {
                             </GridItem>
 
                             <GridItem colSpan={2}>
-                                <Field name="tags">
-                                    {({ field }) => (
-                                        <FormControl marginTop="1em">
-                                            <FormLabel htmlFor="tags" display="flex" justifyContent="space-between">
-                                                Etiquetas
-                                            </FormLabel>
-                                            <Input
-                                                type="text"
-                                                placeholder="Etiquetas"
-                                                id="tags"
-                                                {...field}
-                                            />
-                                        </FormControl>
-                                    )}
-                                </Field>
+                                <InputTagField data={values.tags} />
                                 <Button type="submit" colorScheme="purple" width="100%" margin="1.5em auto">Agregar producto</Button>
                             </GridItem>
                         </Grid>
