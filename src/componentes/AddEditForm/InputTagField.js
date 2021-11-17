@@ -54,7 +54,7 @@ export default function InputTagField({data}) {
                                     onChange={onChangeTag}
                                     value={newTag}
                                 />
-                                <InputRightElement width="3rem">
+                                <InputRightElement width="2.5rem">
                                     <IconButton 
                                         bg="transparent"
                                         icon={<AddIcon />} 

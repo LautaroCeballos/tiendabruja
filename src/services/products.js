@@ -1,5 +1,11 @@
-import { initializeApp } from "firebase/app";
-import { collection, addDoc, getDocs, getFirestore, Timestamp } from "firebase/firestore";
+import { initializeApp } from "firebase/app"
+import { collection, addDoc, getDocs, getFirestore, Timestamp } from "firebase/firestore"
+import { 
+  getStorage, 
+  ref, 
+  // getDownloadURL, 
+  uploadBytesResumable 
+} from 'firebase/storage'
 
 const firebaseConfig = {
     apiKey: "AIzaSyC3M2rBLj2jVtdluypfVvEGFmoXLSIoY-4",
@@ -12,7 +18,7 @@ const firebaseConfig = {
 
 initializeApp(firebaseConfig);
 
-const db = getFirestore(); 
+const db = getFirestore();
 
 export const addProduct = (product) => {
     return addDoc(collection(db, "products"), {
@@ -33,5 +39,19 @@ export const getProducts = () => {
         }
       })
     })
+}
+
+export const uploadImage = async (file, product) => {
+  const filePath = `${product}/${file.name}`
+  const newImageRef = ref(getStorage(), filePath)
+  const fileSnapshot = await uploadBytesResumable(newImageRef, file)
+  return fileSnapshot
+  
+  // const publicImageUrl = await getDownloadURL(newImageRef)
+  // return { publicImageUrl, fileSnapshot }
+
+  // const ref =  getStorage().ref(`images/${file.name}`)
+  // const task = ref.put(file) //Nos devuelve la tarea que esta realizando
+  // return task
 }
 

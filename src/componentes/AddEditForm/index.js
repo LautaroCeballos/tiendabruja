@@ -1,6 +1,5 @@
-import { Formik, Form} from "formik"
+import { Formik, Form } from "formik"
 import { addProduct } from "services/products.js"
-import imgDefault from "images/default.jpg"
 import InputField from "./InputField"
 import validations from "./validations"
 import InputTagField from "./InputTagField"
@@ -8,11 +7,9 @@ import {
     Button,
     Flex,
     Grid,
-    GridItem,
-    Image
+    GridItem
 } from "@chakra-ui/react"
-
-
+import InpuetImgField from "./InputImgField"
 
 export default function AddEditForm() {
     return <>
@@ -46,28 +43,26 @@ export default function AddEditForm() {
             {({ values }) => (
                 <Form>
                     <Flex display="flex" flexWrap="wrap" alignContent="start" width="100%">
-                        {values.img !== "" ?
-                            <Image src={values.img} alt={values.nombre} width="100%" height={["8em", "15em"]} objectFit="cover" />
-                            : <Image src={imgDefault} alt={values.nombre} width="100%" height={["8em", "15em"]} objectFit="cover" />
-                        }
+
+                        <InpuetImgField values={values}/>
 
                         <Grid templateColumns="repeat(2, 1fr)" gap="0 1em" width="100%">
                             <GridItem colSpan={2} marginTop="1em">
-                                <InputField name="nombre" label="Nombre" type="text" placeholder="Nombre del Producto" isRequired/>
+                                <InputField name="nombre" label="Nombre" type="text" placeholder="Nombre del Producto" isRequired />
                             </GridItem>
 
                             <GridItem>
-                                <InputField name="bultoCant" label="Cant por Bulto" type="number" placeholder="100 unidades" isRequired/>
-                                <InputField name="costoUnitario" label="Costo Unitario" type="number" placeholder="$0" isRequired/>
-                                <InputField name="ganancia" label="Ganancia" type="number" placeholder="0%" isRequired/>
-                                <InputField name="promo" label="Promo" type="text" placeholder="Promociones y detalles"/>
+                                <InputField name="bultoCant" label="Cant por Bulto" type="number" placeholder="100 unidades" isRequired />
+                                <InputField name="costoUnitario" label="Costo Unitario" type="number" placeholder="$0" isRequired />
+                                <InputField name="ganancia" label="Ganancia" type="number" placeholder="0%" isRequired />
+                                <InputField name="promo" label="Promo" type="text" placeholder="Promociones y detalles" />
                             </GridItem>
 
                             <GridItem>
-                                <InputField name="costoMayorista" label="Costo Mayorista" type="number" placeholder="$0" isRequired/>
-                                <InputField name="precioVenta" label="Precio Final" type="number" placeholder="$0" isRequired/>
-                                <InputField name="proveedor" label="Proveedor" type="text" placeholder="NatuShop" isRequired/>
-                                <InputField name="stock" label="Stock" type="number" placeholder="stock" isRequired/>
+                                <InputField name="costoMayorista" label="Costo Mayorista" type="number" placeholder="$0" isRequired />
+                                <InputField name="precioVenta" label="Precio Final" type="number" placeholder="$0" isRequired />
+                                <InputField name="proveedor" label="Proveedor" type="text" placeholder="NatuShop" isRequired />
+                                <InputField name="stock" label="Stock" type="number" placeholder="stock" isRequired />
                             </GridItem>
 
                             <GridItem colSpan={2}>
