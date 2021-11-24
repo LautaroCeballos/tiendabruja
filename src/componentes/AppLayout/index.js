@@ -1,11 +1,9 @@
-import { Box, Flex } from "@chakra-ui/layout"
+import { Flex } from "@chakra-ui/layout"
 
 export default function AppLayout({children}) {
     return <>
-        <Flex bg="brand.accent" flexDirection="row" marginTop="4em" height="100%">
-            <Box w={{base: "100%", md: "48em"}} minHeight="100vh" height="100%" bg="white" margin="auto" padding="0 2em">
-                {children}
-            </Box>
+        <Flex width="100%" height="100%" minHeight="100vh" bg="brand.secondary" alignItems="center">
+            {children}
         </Flex>
     </>
 }

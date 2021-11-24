@@ -2,11 +2,13 @@
 import AppLayout from 'componentes/AppLayout'
 import Header from 'componentes/Header'
 import Home from 'pages/home'
+import Login from 'pages/login'
 import AddEditForm from 'componentes/AddEditForm'
+
 import {
   BrowserRouter as Router,
   Route,
-  Switch
+  Routes
 } from 'react-router-dom'
 
 
@@ -15,12 +17,12 @@ export default function App() {
     <Router>
       <Header />
       <AppLayout>
-        <Switch>
-          <Route exact path="/" component={Home}/>
-          <Route exact path="/home" component={Home}/>
-          <Route path="/agregar" component={AddEditForm}/>
-          <Route path="/editar/:id" component={AddEditForm}/>
-        </Switch>
+        <Routes>
+          <Route path="/" element={<Home/>}/>
+          <Route path="/login" element={<Login/>}/>
+          <Route path="/agregar" element={<AddEditForm/>}/>
+          {/* <Route path="/editar/:id" element={<AddEditForm/>}/> */}
+        </Routes>
       </AppLayout>
     </Router>
   </>
