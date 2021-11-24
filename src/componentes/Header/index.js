@@ -10,10 +10,14 @@ import {
 } from '@chakra-ui/react'
 import { HamburgerIcon } from '@chakra-ui/icons'
 import { Link } from "react-router-dom";
+import { signOutUser } from 'services/firebase'
+import useUser from 'hooks/useUser'
 
 import logoTiendaBruja from 'images/tbruja.svg'
 
 export default function Header() {
+    const user =  useUser()
+
     return <>
         <chakra.header 
             width="100%"
@@ -49,6 +53,7 @@ export default function Header() {
                         <MenuItem>Actualizar Productos</MenuItem>
                         <MenuItem>Vender</MenuItem>
                         <MenuItem>Configuraciones</MenuItem>
+                        <MenuItem onClick={() => signOutUser()}>Salir</MenuItem>
                     </MenuList>
                 </Menu>
             </Flex>
