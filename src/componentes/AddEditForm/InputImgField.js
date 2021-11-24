@@ -17,7 +17,7 @@ import { AddIcon } from '@chakra-ui/icons'
 
 import { useEffect, useState } from "react"
 // import { useFormikContext } from 'formik'
-import { uploadImage } from "services/products"
+import { uploadImage } from "services/firebase"
 
 // const IMAGE_STATES = {
 //     ERROR: -1,
