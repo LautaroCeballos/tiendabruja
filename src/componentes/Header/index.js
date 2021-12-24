@@ -1,14 +1,14 @@
 import { 
     chakra, 
     Image, 
-    Button, 
     Flex,
     Menu,
     MenuButton,
     MenuList,
-    MenuItem
+    MenuItem,
+    IconButton
 } from '@chakra-ui/react'
-import { HamburgerIcon } from '@chakra-ui/icons'
+import { SearchIcon } from '@chakra-ui/icons'
 import { Link } from "react-router-dom";
 import { signOutUser } from 'services/firebase'
 import useUser from 'hooks/useUser'
@@ -27,7 +27,8 @@ export default function Header() {
             justifyContent="space-between" 
             alignItems="center" 
             position="fixed" 
-            zIndex="99" top="0" 
+            zIndex="99" 
+            top="0" 
             boxShadow="md" 
             bg="brand.primary"
         >
@@ -36,26 +37,19 @@ export default function Header() {
                     <Image width="200px" src={logoTiendaBruja} alt="Logo TiendaBruja"/>
                 </Link>
 
-                <Menu>
-                    <MenuButton 
-                        as={Button} 
-                        bg="brand.primary" 
-                        _hover={{
-                            bg: "brand.accent",
-                        }}
-                        _active={{bg: "brand.accent"}} 
-                        boxShadow="md"
-                    >
-                        <HamburgerIcon color="brand.secondary"  fontWeight="bold"/>
-                    </MenuButton>
-                    <MenuList>
-                        <Link to="/agregar"><MenuItem>Agregar</MenuItem></Link>
-                        <MenuItem>Actualizar Productos</MenuItem>
-                        <MenuItem>Vender</MenuItem>
-                        <MenuItem>Configuraciones</MenuItem>
-                        <MenuItem onClick={() => signOutUser()}>Salir</MenuItem>
-                    </MenuList>
-                </Menu>
+                <Flex>
+                    {user && 
+                        <Menu>
+                            <MenuButton>
+                                <Image src={user.imgProfile} boxSize="2.5em" borderRadius="full" boxShadow="md"/>
+                            </MenuButton>
+                            <MenuList>
+                                <MenuItem>Ver Perfil</MenuItem>
+                                <MenuItem onClick={() => signOutUser()}>Salir</MenuItem>
+                            </MenuList>
+                        </Menu>
+                    }
+                </Flex>
             </Flex>
         </chakra.header>
     </>
