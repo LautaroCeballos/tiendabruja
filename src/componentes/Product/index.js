@@ -1,57 +1,57 @@
 import { Flex, Text, Box } from "@chakra-ui/layout"
 import { Image } from "@chakra-ui/image"
 import { chakra } from "@chakra-ui/system"
-import { Tag, Divider } from "@chakra-ui/react"
-import { useState } from "react"
-import { useEffect } from "react/cjs/react.development"
+import { Tag, Divider, Collapse, IconButton } from "@chakra-ui/react"
+import { useDisclosure } from "@chakra-ui/hooks"
+import { EditIcon, DeleteIcon } from '@chakra-ui/icons'
+
+import ModalImage from "componentes/ModalImage"
 
 
 export default function Product({ item }) {
-
-    const [product, setProduct] = useState()
-    const [isVisible, setIsVisible] = useState(false)
-
-    useEffect(() => {
-        setProduct(item)
-    }, [item])
-
-    const handleClick = () => {
-        setIsVisible(!isVisible)
-    }
+    const modalImageEvent = useDisclosure()
+    const moreInfoEvent = useDisclosure()
 
     return <>
-        { product && 
+        {item && 
             <chakra.article display="flex" flexWrap="wrap">
-                <Flex onClick={handleClick}>
-                    <Box minWidth="5em" marginRight="1em" textAlign="center">
-                        <Image src={product.img} alt={product.nombre} boxSize="5em" margin="auto" objectFit="cover" borderRadius="md" />
-                        <Text color="gray.500">Stock: {product.stock}</Text>
+                <ModalImage src={item.img} alt={item.nombre} event={modalImageEvent} />
+                <Flex width="100%">
+                    <Box minWidth="5em" marginRight="1em" textAlign="center" cursor="pointer" onClick={modalImageEvent.onOpen}>
+                        <Image src={item.img} alt={item.nombre} boxSize="5em" margin="auto" objectFit="cover" borderRadius="md" />
+                        <Text color="gray.500" fontSize=".8em" margin=".5em 0">stock: {item.stock}</Text>
                     </Box>
-                    <Box>
-                        <Text fontWeight="semibold" fontSize="xl" color="brand.secondary">{product.nombre}</Text>
+
+                    <Box onClick={moreInfoEvent.onToggle} width="100%" cursor="pointer">
+                        <Flex justifyContent="space-between" alignItems="center">
+                            <Text fontWeight="semibold" fontSize="xl" color="brand.secondary">{item.nombre}</Text>
+                            <Flex marginBottom="0.5em">
+                                <IconButton bg="transparent" color="brand.secondary" size="sm" aria-label="Editar articulo" icon={<EditIcon/>}/>
+                                <IconButton bg="transparent" color="brand.secondary" size="sm" aria-label="Eliminar articulo" icon={<DeleteIcon/>}/>
+                            </Flex>
+                        </Flex>
                         <Divider />
-                        <Text color="green.500" fontWeight="semibold">Precio Venta: ${product.precioVenta}</Text>
-                        <Text color="gray.500">Promo: {product.promo}</Text>
+                        <Text color="green.500" fontWeight="semibold">Precio Venta: ${item.precioVenta}</Text>
+                        <Text color="gray.500">Promo: {item.promo}</Text>
                     </Box>
                 </Flex>
 
-                {isVisible &&  
-                    <Flex flexWrap="wrap" marginTop=".5em" justifyContent="space-between" bg="gray.200" padding=".5em 1em" borderRadius="xl" width="100%">
-                        <Text color="green.700">Costo Pack: ${product.costoMayorista}</Text> 
-                        <Text color="green.700">Costo Unitario: ${product.costoUnitario}</Text> 
-                        <Text>Proveedor: {product.proveedor}</Text>
+                <Flex  as={Collapse} in={moreInfoEvent.isOpen} width="100%">
+                   <Flex flexWrap="wrap" marginTop=".5em" justifyContent="space-between" bg="gray.200" padding=".5em 1em" borderRadius="md" marginBottom="0.5em" width="100%">
+                        <Text color="green.700">Costo Unitario: ${item.costoUnitario}</Text>
+                        <Text color="green.700">Costo Pack: ${item.costoMayorista}</Text>
+                        <Text color="green.700">Proveedor: {item.proveedor}</Text>
                         <Box width="100%" marginTop=".5em">
-                            {   
-                                product.tags && Array.isArray(product.tags) && product.tags.length > 0 &&
-                                    product.tags.map((tag, index) => {
-                                        return <Tag key={index} variant="outline" colorScheme="purple" margin="0 .5em .5em 0">{tag}</Tag>
-                                    })
+                            {
+                                item.tags && Array.isArray(item.tags) && item.tags.length > 0 &&
+                                item.tags.map((tag, index) => {
+                                    return <Tag key={index} variant="outline" colorScheme="purple" cursor="pointer" margin="0 .5em .5em 0">{tag}</Tag>
+                                })
                             }
                         </Box>
-
                     </Flex>
-                }
-                <Divider marginBottom="1em"/>
+                </Flex>
+                <Divider marginBottom="1em" />
             </chakra.article>
         }
 

@@ -1,8 +1,10 @@
 import ProductList from "componentes/ProductList"
+import AddEditNav from "componentes/AddEditNav"
 import SkeletonProductList from "componentes/ProductList/skeleton"
 import { useEffect, useState } from "react"
 import { getProducts } from "services/firebase"
 import { Box } from '@chakra-ui/react'
+
 
 export default function Home(){
     const [products, setProducts] = useState()
@@ -14,11 +16,12 @@ export default function Home(){
     }, [])
 
     return <>
-        <Box w={{base: "100%", md: "48em"}}  minHeight="100vh" bg="white" margin="5em auto 0" padding="0 2em" boxShadow="lg">
-        { products ?
+        <Box w={{base: "100%", md: "48em"}} minHeight="100vh" bg="white" margin="5em auto 0" padding="0 2em" boxShadow="lg">
+            { products ?
                 <ProductList items={products}/>
                 : <SkeletonProductList/>
             }
+            <AddEditNav/>
         </Box>
     </>
     
