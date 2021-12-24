@@ -1,12 +1,7 @@
 import { initializeApp } from "firebase/app"
 import { GoogleAuthProvider, getAuth, signInWithRedirect, signOut, onAuthStateChanged } from 'firebase/auth'
 import { collection, addDoc, getDocs, getFirestore, Timestamp } from "firebase/firestore"
-import {
-  getStorage,
-  ref,
-  // getDownloadURL, 
-  uploadBytesResumable
-} from 'firebase/storage'
+import { getStorage, ref, getDownloadURL,  uploadBytesResumable } from 'firebase/storage'
 
 const firebaseConfig = {
   apiKey: "AIzaSyC3M2rBLj2jVtdluypfVvEGFmoXLSIoY-4",
@@ -59,11 +54,35 @@ const mapUserFromGoogleAuth = (user) => {
 // }
 
 
-export const addProduct = (product) => {
-  return addDoc(collection(db, "products"), {
+export const addProduct = async (imgFile, product) => {
+  const {publicImageUrl} = await uploadImage(imgFile, product.name)
+  const productData = {
     ...product,
+    img: publicImageUrl,
     createAt: Timestamp.fromDate(new Date())
-  });
+  }
+  return addDoc(collection(db, "products"), productData)
+}
+
+const uploadImage = async (file, product) => {
+  const filePath = `${product}/${file.name}`
+  const newImageRef = ref(getStorage(), filePath)
+  const fileSnapshot = await uploadBytesResumable(newImageRef, file)
+  const publicImageUrl = await getDownloadURL(newImageRef)
+
+  return { publicImageUrl, fileSnapshot }
+
+    // const task = fileSnapshot
+    // if(task){
+    //     let onProgress = () => {}
+    //     let onError = () => {
+    //         console.log('Error')
+    //     }
+    //     let onComplete = () => {
+    //         console.log('onComplete')
+    //     }
+    //     task.on('state_changed', onProgress, onError, onComplete)
+    // }
 }
 
 export const getProducts = () => {
@@ -80,17 +99,4 @@ export const getProducts = () => {
     })
 }
 
-export const uploadImage = async (file, product) => {
-  const filePath = `${product}/${file.name}`
-  const newImageRef = ref(getStorage(), filePath)
-  const fileSnapshot = await uploadBytesResumable(newImageRef, file)
-  return fileSnapshot
-
-  // const publicImageUrl = await getDownloadURL(newImageRef)
-  // return { publicImageUrl, fileSnapshot }
-
-  // const ref =  getStorage().ref(`images/${file.name}`)
-  // const task = ref.put(file) //Nos devuelve la tarea que esta realizando
-  // return task
-}
 
