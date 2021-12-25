@@ -5,10 +5,8 @@ import {
     Menu,
     MenuButton,
     MenuList,
-    MenuItem,
-    IconButton
+    MenuItem
 } from '@chakra-ui/react'
-import { SearchIcon } from '@chakra-ui/icons'
 import { Link } from "react-router-dom";
 import { signOutUser } from 'services/firebase'
 import useUser from 'hooks/useUser'
