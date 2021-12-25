@@ -4,9 +4,8 @@ import { chakra } from "@chakra-ui/system"
 import { Tag, Divider, Collapse, IconButton } from "@chakra-ui/react"
 import { useDisclosure } from "@chakra-ui/hooks"
 import { EditIcon, DeleteIcon } from '@chakra-ui/icons'
-
 import ModalImage from "componentes/ModalImage"
-
+import { Link } from "react-router-dom";
 
 export default function Product({ item }) {
     const modalImageEvent = useDisclosure()
@@ -25,15 +24,19 @@ export default function Product({ item }) {
                     <Box onClick={moreInfoEvent.onToggle} width="100%" cursor="pointer">
                         <Flex justifyContent="space-between" alignItems="center">
                             <Text fontWeight="semibold" fontSize="xl" color="brand.secondary">{item.nombre}</Text>
-                            <Flex marginBottom="0.5em">
-                                <IconButton bg="transparent" color="brand.secondary" size="sm" aria-label="Editar articulo" icon={<EditIcon/>}/>
-                                <IconButton bg="transparent" color="brand.secondary" size="sm" aria-label="Eliminar articulo" icon={<DeleteIcon/>}/>
-                            </Flex>
                         </Flex>
                         <Divider />
                         <Text color="green.500" fontWeight="semibold">Precio Venta: ${item.precioVenta}</Text>
                         <Text color="gray.500">Promo: {item.promo}</Text>
                     </Box>
+                    <Flex justifyContent="flex-end" alignContent="flex-start" flexWrap="wrap">
+                        <Link to={`/edit/${item.id}`}>
+                            <IconButton bg="transparent" color="brand.secondary" size="sm" aria-label="Editar articulo" icon={<EditIcon/>}/>
+                        </Link>
+                        <Link to="/">
+                            <IconButton bg="transparent" color="brand.secondary" size="sm" aria-label="Eliminar articulo" icon={<DeleteIcon/>}/>
+                        </Link>
+                    </Flex>
                 </Flex>
 
                 <Flex  as={Collapse} in={moreInfoEvent.isOpen} width="100%">
