@@ -76,7 +76,7 @@ export default function InputTagField({data}) {
                                     margin="0 .5em .5em"
                                 >
                                     <TagLabel>{tag}</TagLabel>
-                                    <TagRightIcon boxSize="0.7em" as={CloseIcon} onClick={() => remove(index)} />
+                                    <TagRightIcon boxSize="0.7em" cursor="pointer" as={CloseIcon} onClick={() => remove(index)} />
                                 </Tag>
                         )})
                     }

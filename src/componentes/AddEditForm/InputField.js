@@ -13,6 +13,7 @@ function ErrorFormMessage({ name }) {
 }
 
 export default function InputField({name, label, type, placeholder, isRequired}){
+
     return <>
         <Field name={name}>
             {({ field }) => (

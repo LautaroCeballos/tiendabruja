@@ -12,7 +12,7 @@ import ModalImage from "componentes/ModalImage"
 //     COMPLETE: 2
 // }
 
-export default function InpuetImgField({values, setImgFile}){
+export default function InputImgField({values, setImgFile}){
     const modalEvent = useDisclosure()
     
     const [blobURL, setBlobURL] = useState('')
@@ -20,12 +20,14 @@ export default function InpuetImgField({values, setImgFile}){
 
     useEffect(() => {
         let valuesImg = values.img
+        
         if(!blobURL && valuesImg.length === 0){
             setImgURL(imgDefault)
         } else if (!blobURL && valuesImg.length > 0) {
             setImgURL(valuesImg)
         } else {
             setImgURL(blobURL)
+            console.log(valuesImg.length)
         }
     }, [blobURL, values])
 

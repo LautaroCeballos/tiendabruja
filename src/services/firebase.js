@@ -1,6 +1,6 @@
 import { initializeApp } from "firebase/app"
 import { GoogleAuthProvider, getAuth, signInWithRedirect, signOut, onAuthStateChanged } from 'firebase/auth'
-import { collection, addDoc, getDocs, getFirestore, Timestamp } from "firebase/firestore"
+import { collection, addDoc, getDocs, getFirestore, Timestamp, getDoc, doc, deleteDoc, setDoc } from "firebase/firestore"
 import { getStorage, ref, getDownloadURL,  uploadBytesResumable } from 'firebase/storage'
 
 const firebaseConfig = {
@@ -42,18 +42,6 @@ const mapUserFromGoogleAuth = (user) => {
   return userMap
 }
 
-// export const getUserResult = async () => {
-//   const result = await getRedirectResult(auth)
-//   if(result){
-//     const credential = GoogleAuthProvider.credentialFromResult(result)
-//     const token = credential.accessToken
-//     const user = result.user
-//     console.log(`Token:  ${token}`)
-//     console.log(`User:  ${user.toJSON()}`)
-//   }
-// }
-
-
 export const addProduct = async (imgFile, product) => {
   const {publicImageUrl} = await uploadImage(imgFile, product.name)
   const productData = {
@@ -71,18 +59,6 @@ const uploadImage = async (file, product) => {
   const publicImageUrl = await getDownloadURL(newImageRef)
 
   return { publicImageUrl, fileSnapshot }
-
-    // const task = fileSnapshot
-    // if(task){
-    //     let onProgress = () => {}
-    //     let onError = () => {
-    //         console.log('Error')
-    //     }
-    //     let onComplete = () => {
-    //         console.log('onComplete')
-    //     }
-    //     task.on('state_changed', onProgress, onError, onComplete)
-    // }
 }
 
 export const getProducts = () => {
@@ -96,7 +72,43 @@ export const getProducts = () => {
           id,
         }
       })
+    }).catch((err) => {
+      return `Error al devolver los productos ${err}`
     })
 }
+
+export const getProduct = (productId) => {
+  return getDoc(doc(db, "products", productId))
+  .then((result) => {
+    if(result.exists()){
+      return {
+        ...result.data()
+      }
+    } else {
+      return `No se encontro el articulo especificado`
+    }
+  }).catch((err) => {
+    return `Error al devolver el producto ${err}`
+  })
+}
+
+export const deleteProduct = (productId) => {
+  return deleteDoc(doc(db, "products", productId))
+    .then(() => {
+      return "Producto eliminado con exito"
+    }).catch((err) => {
+      return `Error al eliminar el producto ${err}`
+    })
+}
+
+export const updateProduct = (productId, productData) => {
+  return setDoc(doc(db, "products", productId), productData)
+    .then(() => {
+      return "Producto actualizado con exito"
+    }).catch((err) => {
+      return `Error al actualizar el producto ${err}`
+    })
+}
+
 
 
