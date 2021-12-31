@@ -4,12 +4,20 @@ import { chakra } from "@chakra-ui/system"
 import { Tag, Divider, Collapse, IconButton } from "@chakra-ui/react"
 import { useDisclosure } from "@chakra-ui/hooks"
 import { EditIcon, DeleteIcon } from '@chakra-ui/icons'
-import ModalImage from "componentes/ModalImage"
 import { Link } from "react-router-dom";
+
+import ModalImage from "componentes/ModalImage"
+import { deleteProduct } from 'services/firebase'
 
 export default function Product({ item }) {
     const modalImageEvent = useDisclosure()
     const moreInfoEvent = useDisclosure()
+
+    const suprProduct = (productId) => {
+        deleteProduct(productId).then(() => {
+            console.log("producto eliminado con exito")
+        })
+    }
 
     return <>
         {item && 
@@ -30,12 +38,10 @@ export default function Product({ item }) {
                         <Text color="gray.500">Promo: {item.promo}</Text>
                     </Box>
                     <Flex justifyContent="flex-end" alignContent="flex-start" flexWrap="wrap">
-                        <Link to={`/edit/${item.id}`}>
+                        <Link to={`/products/edit/${item.id}`}>
                             <IconButton bg="transparent" color="brand.secondary" size="sm" aria-label="Editar articulo" icon={<EditIcon/>}/>
                         </Link>
-                        <Link to="/">
-                            <IconButton bg="transparent" color="brand.secondary" size="sm" aria-label="Eliminar articulo" icon={<DeleteIcon/>}/>
-                        </Link>
+                        <IconButton bg="transparent" color="brand.secondary" size="sm" aria-label="Eliminar articulo" icon={<DeleteIcon/>} onClick={() => suprProduct(item.id)}/>
                     </Flex>
                 </Flex>
 

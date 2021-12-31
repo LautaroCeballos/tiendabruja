@@ -17,7 +17,7 @@ export default function SkeletonProductList() {
                                     <Skeleton color="gray.500" height="1em" marginTop=".5em"/>
                                 </Box>
                                 <Box width="100%">
-                                    <Skeleton color="gray.500" height="1em" width="15em" marginTop=".5em"/>
+                                    <Skeleton color="gray.500" height="1em" width="15em" marginTop=".5em" marginBottom=".5em"/>
                                     <Divider />
                                     <Skeleton color="gray.500" height="1em" width="13em" marginTop=".5em"/>
                                     <Skeleton color="gray.500" height="1em" width="11em" marginTop=".5em"/>
