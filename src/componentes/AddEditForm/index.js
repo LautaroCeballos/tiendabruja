@@ -1,48 +1,53 @@
 import { Formik, Form } from "formik"
 import { useState } from "react"
-import { addProduct } from "services/firebase.js"
-import InputField from "./InputField"
-import validations from "./validations"
-import InputTagField from "./InputTagField"
+import { addProduct, updateProduct } from "services/firebase.js"
 import { Button, Flex, Grid, GridItem } from "@chakra-ui/react"
+import validations from "./validations"
+import InputField from "./InputField"
+import InputTagField from "./InputTagField"
 import InputImgField from "./InputImgField"
 
-export default function AddEditForm() {
+export default function AddEditForm({ defaultValues }) {
     const [imgFile, setImgFile] = useState('')
+    const initialValues = {
+        nombre: '',
+        img: '',
+        stock: '',
+        costoMayorista: '',
+        bultoCant: '',
+        costoUnitario: '',
+        precioVenta: '',
+        promo: '',
+        proveedor: '',
+        ganancia: '',
+        tags: []
+    }
 
     return <>
         <Formik
-            initialValues={{
-                nombre: '',
-                img: '',
-                stock: '',
-                costoMayorista: '',
-                bultoCant: '',
-                costoUnitario: '',
-                precioVenta: '',
-                promo: '',
-                proveedor: '',
-                ganancia: '',
-                tags: []
-            }}
+            initialValues={defaultValues ? defaultValues : initialValues}
 
             validate={validations}
 
             onSubmit={(dataForm, { resetForm }) => {
-
-                addProduct(imgFile, dataForm)
-                    .then(() => {
-                        resetForm();
-                    }).catch((error) => {
-                        console.log(error)
-                    })
+                defaultValues ?
+                    updateProduct(defaultValues.id, dataForm)
+                        .then((result) => {
+                            console.log(result)
+                        })
+                :   addProduct(imgFile, dataForm)
+                        .then(() => {
+                            resetForm();
+                        }).catch((error) => {
+                            console.log(error)
+                        })
             }}
         >
             {({ values }) => (
-                <Flex display="flex" flexWrap="wrap" alignContent="start" w={{base: "100%", md: "48em"}}  bg="white" margin="5em auto 0" padding="0 2em" boxShadow="lg">
+                <Flex display="flex" flexWrap="wrap" alignContent="start" w={{ base: "100%", md: "48em" }} bg="white" margin="5em auto 0" padding="0 2em" boxShadow="lg">
                     <Form >
-                        <Flex display="flex" flexWrap="wrap" alignContent="start" >
-                            <InputImgField values={values} setImgFile={setImgFile}/>
+                        <Flex display="flex" flexWrap="wrap" alignContent="start" width='100%'>
+                            <InputImgField values={values} setImgFile={setImgFile} />
                             <Grid templateColumns="repeat(2, 1fr)" gap="0 1em" width="100%">
                                 <GridItem colSpan={2} marginTop="1em">
                                     <InputField name="nombre" label="Nombre" type="text" placeholder="Nombre del Producto" isRequired />
@@ -64,7 +69,9 @@ export default function AddEditForm() {
 
                                 <GridItem colSpan={2}>
                                     <InputTagField data={values.tags} />
-                                    <Button type="submit" colorScheme="purple" width="100%" margin="1.5em auto">Agregar producto</Button>
+                                    <Button type="submit" colorScheme="purple" width="100%" margin="1.5em auto">
+                                        { defaultValues ? "Editar Producto" : "Agregar Producto" }
+                                    </Button>
                                 </GridItem>
                             </Grid>
                         </Flex>
