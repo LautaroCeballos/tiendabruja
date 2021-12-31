@@ -31,7 +31,7 @@ export default function Header() {
             bg="brand.primary"
         >
             <Flex w={{base: "100%", md: "48em"}} margin="0 auto" justifyContent="space-between">
-                <Link to="/">
+                <Link to="/products">
                     <Image width="200px" src={logoTiendaBruja} alt="Logo TiendaBruja"/>
                 </Link>
 
