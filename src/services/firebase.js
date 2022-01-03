@@ -1,7 +1,7 @@
 import { initializeApp } from "firebase/app"
 import { GoogleAuthProvider, getAuth, signInWithRedirect, signOut, onAuthStateChanged } from 'firebase/auth'
 import { collection, addDoc, getDocs, getFirestore, Timestamp, getDoc, doc, deleteDoc, setDoc } from "firebase/firestore"
-import { getStorage, ref, getDownloadURL,  uploadBytesResumable } from 'firebase/storage'
+import { getStorage, ref, getDownloadURL,  uploadBytesResumable, deleteObject } from 'firebase/storage'
 
 const firebaseConfig = {
   apiKey: "AIzaSyC3M2rBLj2jVtdluypfVvEGFmoXLSIoY-4",
@@ -43,7 +43,7 @@ const mapUserFromGoogleAuth = (user) => {
 }
 
 export const addProduct = async (imgFile, product) => {
-  const {publicImageUrl} = await uploadImage(imgFile, product.name)
+  const {publicImageUrl} = await uploadImage(imgFile, product.nombre)
   const productData = {
     ...product,
     img: publicImageUrl,
@@ -52,13 +52,13 @@ export const addProduct = async (imgFile, product) => {
   return addDoc(collection(db, "products"), productData)
 }
 
-const uploadImage = async (file, product) => {
-  const filePath = `${product}/${file.name}`
-  const newImageRef = ref(getStorage(), filePath)
-  const fileSnapshot = await uploadBytesResumable(newImageRef, file)
-  const publicImageUrl = await getDownloadURL(newImageRef)
-
-  return { publicImageUrl, fileSnapshot }
+export const updateProduct = (productId, productData) => {
+  return setDoc(doc(db, "products", productId), productData)
+    .then(() => {
+      return "Producto actualizado con exito"
+    }).catch((err) => {
+      return `Error al actualizar el producto ${err}`
+    })
 }
 
 export const getProducts = () => {
@@ -92,22 +92,50 @@ export const getProduct = (productId) => {
   })
 }
 
-export const deleteProduct = (productId) => {
-  return deleteDoc(doc(db, "products", productId))
-    .then(() => {
-      return "Producto eliminado con exito"
-    }).catch((err) => {
-      return `Error al eliminar el producto ${err}`
-    })
+const uploadImage = async (file, product) => {
+  const filePath = `${product}/${file.name}`
+  const newImageRef = ref(getStorage(), filePath)
+  const fileSnapshot = await uploadBytesResumable(newImageRef, file)
+  const publicImageUrl = await getDownloadURL(newImageRef)
+  
+  return { publicImageUrl, fileSnapshot }
 }
 
-export const updateProduct = (productId, productData) => {
-  return setDoc(doc(db, "products", productId), productData)
-    .then(() => {
-      return "Producto actualizado con exito"
-    }).catch((err) => {
-      return `Error al actualizar el producto ${err}`
-    })
+export const deleteProduct = async (productId) => {
+  const productRef = doc(db, "products", productId)
+  try{
+    const publicImageUrl = await (await getDoc(productRef)).data().img
+    await deleteDoc(productRef)
+    await deleteImage(publicImageUrl)
+    return 'Producto eliminado con exito'
+  } catch(err){
+    return `Error al eliminar el producto ${err}`
+  }
+}
+
+// export const deleteProduct = (productId) => {
+//   const productRef = doc(db, "products", productId)
+//   getDoc(productRef)
+//     .then((result) => {
+//       const publicImageUrl = result.data().img
+//       deleteDoc(productRef)
+//         .then(() => {
+//           deleteImage(publicImageUrl).then(() => {
+//             console.log(`Imagen eliminada con exito`)
+//           }).catch((err) => {
+//             console.log(`Èrror al eliminar la imagen ${err}`)
+//           })
+//         }).catch((err) => {
+//           console.log(`Error al eliminar el documento ${err}`)
+//         })
+//       }).catch((err) => {
+//         console.log(`Error al obtener el documento ${err}`)
+//       })
+// }
+
+const deleteImage = async (filePath) => {
+  const imageRef = ref(getStorage(), filePath)
+  await deleteObject(imageRef)
 }
 
 

@@ -9,14 +9,14 @@ import { Link } from "react-router-dom";
 import ModalImage from "componentes/ModalImage"
 import { deleteProduct } from 'services/firebase'
 
+
 export default function Product({ item }) {
     const modalImageEvent = useDisclosure()
     const moreInfoEvent = useDisclosure()
 
-    const suprProduct = (productId) => {
-        deleteProduct(productId).then(() => {
-            console.log("producto eliminado con exito")
-        })
+    const suprProduct = async (productId) => {
+        const result = await deleteProduct(productId)
+        console.log(result)
     }
 
     return <>
