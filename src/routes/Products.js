@@ -9,7 +9,7 @@ export default function Home(){
     const products = useProducts()
 
     return <>
-        <Box w={{base: "100%", md: "48em"}} minHeight="100vh" bg="white" margin="5em auto 0" padding="0 2em" boxShadow="lg">
+        <Box w={{base: "100%", md: "48em"}} minHeight="90vh" bg="white" margin="5em auto 0" padding="0 2em" boxShadow="lg">
             { products.length !== 0 ?
                 <ProductList items={products}/>
                 : <SkeletonProductList/>

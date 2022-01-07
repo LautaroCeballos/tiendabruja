@@ -5,7 +5,7 @@ import useUser from 'hooks/useUser'
 import { useEffect } from 'react'
 import { useNavigate } from 'react-router'
 
-export default function Login(){
+export default function Login(){ 
     const user = useUser()
     const navigate = useNavigate()
 
