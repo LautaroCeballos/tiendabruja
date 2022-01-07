@@ -43,19 +43,40 @@ const mapUserFromGoogleAuth = (user) => {
 }
 
 export const addProduct = async (imgFile, product) => {
-  const {publicImageUrl} = await uploadImage(imgFile, product.nombre)
+  let imageUrl = ''
+
+  if(imgFile){
+    const { publicImageUrl } =  await uploadImage(imgFile, product.nombre)
+    imageUrl = publicImageUrl ?? publicImageUrl
+  } 
+
   const productData = {
     ...product,
-    img: publicImageUrl,
+    img: imageUrl,
     createAt: Timestamp.fromDate(new Date())
   }
   return addDoc(collection(db, "products"), productData)
 }
 
-export const updateProduct = (productId, productData) => {
-  return setDoc(doc(db, "products", productId), productData)
-    .then(() => {
-      return "Producto actualizado con exito"
+
+
+export const updateProduct = async (productData, newImgFile) => {
+  const productRef = doc(db, "products", productData.id)
+  const oldPublicImageUrl = productData.img
+
+    if(newImgFile){
+      try{
+        if(productData.img !== '') await deleteImage(oldPublicImageUrl)
+        const { publicImageUrl } = await uploadImage(newImgFile, productData.nombre)
+        productData.img = publicImageUrl
+      } catch(err){
+        console.log(err)
+      }
+    }
+  
+  return setDoc(productRef, productData)
+    .then((result) => {
+      return `Producto actualizado con exito ${result}`
     }).catch((err) => {
       return `Error al actualizar el producto ${err}`
     })
@@ -78,7 +99,8 @@ export const getProducts = () => {
 }
 
 export const getProduct = (productId) => {
-  return getDoc(doc(db, "products", productId))
+  const productRef = doc(db, "products", productId)
+  return getDoc(productRef)
   .then((result) => {
     if(result.exists()){
       return {
@@ -101,10 +123,18 @@ const uploadImage = async (file, product) => {
   return { publicImageUrl, fileSnapshot }
 }
 
+const deleteImage = async (filePath) => {
+  if(filePath){
+    const imageRef = ref(getStorage(), filePath)
+    await deleteObject(imageRef)
+  }
+}
+
 export const deleteProduct = async (productId) => {
   const productRef = doc(db, "products", productId)
   try{
-    const publicImageUrl = await (await getDoc(productRef)).data().img
+    const product = await getProduct(productId)
+    const publicImageUrl = product.img
     await deleteDoc(productRef)
     await deleteImage(publicImageUrl)
     return 'Producto eliminado con exito'
@@ -113,30 +143,6 @@ export const deleteProduct = async (productId) => {
   }
 }
 
-// export const deleteProduct = (productId) => {
-//   const productRef = doc(db, "products", productId)
-//   getDoc(productRef)
-//     .then((result) => {
-//       const publicImageUrl = result.data().img
-//       deleteDoc(productRef)
-//         .then(() => {
-//           deleteImage(publicImageUrl).then(() => {
-//             console.log(`Imagen eliminada con exito`)
-//           }).catch((err) => {
-//             console.log(`Èrror al eliminar la imagen ${err}`)
-//           })
-//         }).catch((err) => {
-//           console.log(`Error al eliminar el documento ${err}`)
-//         })
-//       }).catch((err) => {
-//         console.log(`Error al obtener el documento ${err}`)
-//       })
-// }
-
-const deleteImage = async (filePath) => {
-  const imageRef = ref(getStorage(), filePath)
-  await deleteObject(imageRef)
-}
 
 
 

@@ -27,7 +27,6 @@ export default function InputImgField({values, setImgFile}){
             setImgURL(valuesImg)
         } else {
             setImgURL(blobURL)
-            console.log(valuesImg.length)
         }
     }, [blobURL, values])
 

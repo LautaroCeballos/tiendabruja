@@ -5,6 +5,7 @@ import { Tag, Divider, Collapse, IconButton } from "@chakra-ui/react"
 import { useDisclosure } from "@chakra-ui/hooks"
 import { EditIcon, DeleteIcon } from '@chakra-ui/icons'
 import { Link } from "react-router-dom";
+import imgDefault from "images/default.jpg"
 
 import ModalImage from "componentes/ModalImage"
 import { deleteProduct } from 'services/firebase'
@@ -13,6 +14,7 @@ import { deleteProduct } from 'services/firebase'
 export default function Product({ item }) {
     const modalImageEvent = useDisclosure()
     const moreInfoEvent = useDisclosure()
+    const imgUrl = item.img ? item.img : imgDefault
 
     const suprProduct = async (productId) => {
         const result = await deleteProduct(productId)
@@ -22,10 +24,10 @@ export default function Product({ item }) {
     return <>
         {item && 
             <chakra.article display="flex" flexWrap="wrap">
-                <ModalImage src={item.img} alt={item.nombre} event={modalImageEvent} />
+                <ModalImage src={imgUrl} alt={item.nombre} event={modalImageEvent} />
                 <Flex width="100%">
                     <Box minWidth="5em" marginRight="1em" textAlign="center" cursor="pointer" onClick={modalImageEvent.onOpen}>
-                        <Image src={item.img} alt={item.nombre} boxSize="5em" margin="auto" objectFit="cover" borderRadius="md" />
+                        <Image src={imgUrl} alt={item.nombre} boxSize="5em" margin="auto" objectFit="cover" borderRadius="md" />
                         <Text color="gray.500" fontSize=".8em" margin=".5em 0">stock: {item.stock}</Text>
                     </Box>
 

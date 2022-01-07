@@ -6,9 +6,12 @@ import validations from "./validations"
 import InputField from "./InputField"
 import InputTagField from "./InputTagField"
 import InputImgField from "./InputImgField"
+import { useNavigate } from 'react-router'
 
 export default function AddEditForm({ defaultValues }) {
     const [imgFile, setImgFile] = useState('')
+    const navigate = useNavigate()
+
     const initialValues = {
         nombre: '',
         img: '',
@@ -29,15 +32,17 @@ export default function AddEditForm({ defaultValues }) {
 
             validate={validations}
 
-            onSubmit={(dataForm, { resetForm }) => {
+            onSubmit={(dataForm) => {
                 defaultValues ?
-                    updateProduct(defaultValues.id, dataForm)
-                        .then((result) => {
-                            console.log(result)
+                    updateProduct(dataForm, imgFile)
+                        .then(() => {
+                            navigate('/products')
+                        }).catch((err) => {
+                            console.log(err)
                         })
                 :   addProduct(imgFile, dataForm)
                         .then(() => {
-                            resetForm();
+                            navigate('/products')
                         }).catch((error) => {
                             console.log(error)
                         })
